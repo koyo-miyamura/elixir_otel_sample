@@ -30,12 +30,11 @@ services:
     volumes:
       - dbdata:/var/lib/postgresql/data
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/jaeger:2.13.0
     ports:
       - 16686:16686  # Jaeger UI
       - 4318:4318    # OTLP HTTP receiver
     environment:
-      - COLLECTOR_OTLP_ENABLED=true
       - SPAN_STORAGE_TYPE=badger
       - BADGER_EPHEMERAL=false
       - BADGER_DIRECTORY_VALUE=/badger/data
