@@ -4,7 +4,7 @@ import Config
 config :otel_sample, OtelSample.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "localhost",
+  hostname: System.get_env("DB_HOST") || "localhost",
   database: "otel_sample_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
