@@ -1,6 +1,6 @@
 # OtelSample
 
-Phoenix で Open Telemetory 形式のトレースを Jaeger で可視化するサンプル
+Phoenix で Open Telemetry 形式のトレースを Jaeger で可視化するサンプル
 
 `make k6` でリクエストを送ることができます。
 
