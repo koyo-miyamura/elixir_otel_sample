@@ -65,3 +65,15 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# OpenTelemetry configuration
+config :opentelemetry,
+  resource: [
+    service: [
+      name: System.get_env("OTEL_SERVICE_NAME", "otel_sample")
+    ]
+  ]
+
+config :opentelemetry_exporter,
+  otlp_protocol: :http_protobuf,
+  otlp_endpoint: System.get_env("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318")

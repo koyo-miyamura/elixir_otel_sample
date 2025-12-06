@@ -7,6 +7,9 @@ defmodule OtelSample.Application do
 
   @impl true
   def start(_type, _args) do
+    OpentelemetryPhoenix.setup()
+    OpentelemetryEcto.setup([:otel_sample, :repo])
+
     children = [
       OtelSampleWeb.Telemetry,
       OtelSample.Repo,
