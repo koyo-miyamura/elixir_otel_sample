@@ -1,6 +1,8 @@
 defmodule OtelSampleWeb.UserController do
   use OtelSampleWeb, :controller
 
+  require OpenTelemetry.Tracer, as: Tracer
+
   alias OtelSample.Accounts
   alias OtelSample.Accounts.User
 
@@ -12,11 +14,23 @@ defmodule OtelSampleWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/users/#{user}")
-      |> render(:show, user: user)
+    Tracer.with_span "UserController.create" do
+      Tracer.set_attributes([{"controller.action", "create"}, {"user.name", user_params["name"]}])
+
+      result =
+        Tracer.with_span "Accounts.create_user" do
+          Tracer.set_attributes([{"attrs.name", user_params["name"]}])
+          Accounts.create_user(user_params)
+        end
+
+      with {:ok, %User{} = user} <- result do
+        Tracer.set_attributes([{"user.id", user.id}, {"result", "success"}])
+
+        conn
+        |> put_status(:created)
+        |> put_resp_header("location", ~p"/api/users/#{user}")
+        |> render(:show, user: user)
+      end
     end
   end
 
