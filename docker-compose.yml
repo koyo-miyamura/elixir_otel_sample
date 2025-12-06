@@ -11,8 +11,11 @@ services:
     command: mix phx.server
     environment:
       DB_HOST: db
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
+      OTEL_SERVICE_NAME: otel_sample
     links:
       - db
+      - jaeger
     ports:
       - 4000:4000
     volumes:
@@ -26,5 +29,12 @@ services:
       - 5432:5432
     volumes:
       - dbdata:/var/lib/postgresql/data
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 16686:16686  # Jaeger UI
+      - 4318:4318    # OTLP HTTP receiver
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
 volumes:
   dbdata:
