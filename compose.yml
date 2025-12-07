@@ -13,7 +13,7 @@ services:
       DB_HOST: db
       OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
       OTEL_SERVICE_NAME: otel_sample
-    links:
+    depends_on:
       - db
       - jaeger
     ports:
@@ -34,14 +34,5 @@ services:
     ports:
       - 16686:16686  # Jaeger UI
       - 4318:4318    # OTLP HTTP receiver
-    environment:
-      - SPAN_STORAGE_TYPE=badger
-      - BADGER_EPHEMERAL=false
-      - BADGER_DIRECTORY_VALUE=/badger/data
-      - BADGER_DIRECTORY_KEY=/badger/key
-    volumes:
-      - jaeger-badger:/badger
-    user: root
 volumes:
   dbdata:
-  jaeger-badger:
