@@ -34,5 +34,12 @@ services:
     ports:
       - 16686:16686  # Jaeger UI
       - 4318:4318    # OTLP HTTP receiver
+    volumes:
+      - jaeger-badger:/badger
+      - ./jaeger-config.yaml:/etc/jaeger/config.yaml
+    user: root
+    command:
+      - "--config=/etc/jaeger/config.yaml"
 volumes:
   dbdata:
+  jaeger-badger:

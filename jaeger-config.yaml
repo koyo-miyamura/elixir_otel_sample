@@ -1,0 +1,32 @@
+service:
+  extensions: [jaeger_storage, jaeger_query]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [jaeger_storage_exporter]
+
+extensions:
+  jaeger_storage:
+    backends:
+      app_storage:
+        badger:
+          ephemeral: false
+          directories:
+            keys: /badger/key
+            values: /badger/data
+
+  jaeger_query:
+    storage:
+      traces: app_storage
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  jaeger_storage_exporter:
+    trace_storage: app_storage
