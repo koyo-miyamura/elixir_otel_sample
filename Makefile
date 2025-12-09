@@ -10,4 +10,4 @@ setup:
 
 .PHONY: k6
 k6:
-	docker run --rm -i --network otel_sample_default -v "${PWD}/k6-script.js:/k6-script.js" grafana/k6 run /k6-script.js
+	docker run --rm -i --network elixir_otel_sample_default -v "${PWD}/k6-script.js:/k6-script.js" grafana/k6 run /k6-script.js
